@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div>
+
+  <div class="dropdown" style="text-align: center">
+    <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+      Portföy Seçin
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    	{% for i in portofolio_list %}
+        {% if i=='YAPI' %}
+        <li><a class="dropdown-item" href="{{url_for('funds', portfolio_name = i )}}">{{ i }} KREDI PORTFOY</a></li>
+        {% else %}
+        <li><a class="dropdown-item" href="{{url_for('funds', portfolio_name = i )}}">{{ i }} PORTFOY</a></li>
+        {% endif %}
+      {% endfor %}
+
+    </ul>
+  </div>
+  <br>
+  <h3 style="text-align: center">ya da fon arayın</h3>
+  <br>
+  <div class="d-flex aligns-items-center justify-content-center">
+    <form method="POST" action="{{ url_for('search') }}">
+        {{ form.hidden_tag() }}
+        <label for="exampleDataList" class="form-label">Yazmaya başlayın</label>
+        <input class="form-control" list="datalistOptions" id="exampleDataList" type="search" placeholder="Fon Ara" aria-label="Search", name="searched">
+        <datalist id="datalistOptions">
+          {% for i in all_funds %}
+        <option value="{{i.fundname}}"></option>
+          {% endfor %}
+      </datalist>
+        <br>
+        <div class="d-grid gap-2">
+        {{ form.search(class="btn btn-success btn-lg") }}
+        </div>
+       
+        <!--{{ form.searched.label(class="form-label") }}-->
+
+        <!--{{ form.searched(class="form-control") }}-->
+        
+      </form>
+  </div>
+</div>
+
+
+{% endblock %}

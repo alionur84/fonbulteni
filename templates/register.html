@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if current_user.is_authenticated  %}
+	<!-- redirecting the user to dashboard if already authenticated -->
+		<meta http-equiv="Refresh" content="0; url={{url_for('dashboard')}}" />
+
+{% else %}
+
+<div class="shadow p-3 mb-5 bg-body rounded">
+	<h1>Kayıt Formu</h1><br/>
+	{% for field, errors in form.errors.items() %}
+	    <div class="alert alert-danger" role="alert">
+  			{{ ', '.join(errors) }}
+		</div>
+	{% endfor %}
+	<!-- bu action'ı delete function'da bu sayfa döndüğünde tekrar girebilelim diye koyduk -->
+	<form method="POST", action="{{ url_for('register')}}">
+		{{ form.hidden_tag() }}
+
+		{{ form.username.label(class="form-label") }}
+
+		{{ form.username(class="form-control") }}
+		<br/>
+		{{ form.name.label(class="form-label") }}
+
+		{{ form.name(class="form-control") }}
+		<br/>
+		{{ form.email.label(class="form-label") }}
+
+
+		{{ form.email(class="form-control") }}
+		
+		
+	
+		<br/>
+		{{ form.password.label(class="form-label") }}
+
+		{{ form.password(class="form-control") }}
+		<br/>
+		{{ form.password2.label(class="form-label") }}
+
+		{{ form.password2(class="form-control") }}
+		<br/>
+
+		{{ form.submit(class="btn btn-secondary") }}
+		<br>
+		Zaten bir hesabınız var mı? <a href="{{url_for('login')}}">Giriş Yapın</a>
+	</form>
+</div>
+{% endif %}
+
+
+{% endblock %}

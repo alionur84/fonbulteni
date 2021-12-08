@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Bilgileri Güncelle</h1>
+<br/>
+<p class="lead">Güncellemek istediğiniz alanları doldurup güncelle butonunu tıklayınız.<p>
+<div class="shadow p-3 mb-5 bg-body rounded">
+	<!--hangi user ı update edeceğini action ile veriyoruz. functiondan name_to_update.id değişkenini cekerek-->
+	<form action="/update/{{client_to_update.id}}" method="POST">
+		{{ form.hidden_tag() }}
+		<div class="input-group mb-3">
+			<span class="input-group-text">Kullanıcı Adı</span>
+		  	<input type="text" class="form-control" placeholder="{{client_to_update.username}}" aria-label="Name" aria-describedby="button-addon2", name="username">
+		</div>
+		<br>
+		<div class="input-group mb-3">
+			<span class="input-group-text">İsim</span>
+		  	<input type="text" class="form-control" placeholder="{{client_to_update.name}}" aria-label="Name" aria-describedby="button-addon2", name="name">
+		</div>
+		<br>
+		<div class="input-group mb-3">
+			<span class="input-group-text">Email</span>
+		  	<input type="email" class="form-control" placeholder="{{client_to_update.email}}" aria-label="Email" aria-describedby="button-addon2", name="email">
+		</div>
+		<br>
+		<a href="{{url_for('password_update')}}">Parolamı Güncelle</a>
+		<br>
+		<br>
+		{{ form.update(class="btn btn-secondary") }}		
+		<a class="btn btn-danger" href="{{url_for('delete', id=client_to_update.id)}}">Kullanıcıyı Sil</a>
+</form>
+</div>
+
+{% endblock %}

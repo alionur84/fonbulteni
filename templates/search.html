@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h3>Aradığınız Terim: {{ org_search | upper  }}</h3>
+<p class="lead">{{ org_search | capitalize }} ile ilgili sonuçlar aşağıda listelenmiştir.<br>
+Ekle butonu ile fonu bülteninize ekleyebilir, fon fiyat ve değişim bilgilerini her gün mail kutunuzdan takip edebilirsiniz. Fonun ayrıntılarını incele butonuna tıklayarak inceleyebilirsiniz.</p>
+<br>
+<div class="row">
+{% for fund in funds %}
+
+	<div class="col-sm-6">
+	    <div class="card">
+	      <div class="card-body">
+	        <h5 class="card-title">{{ fund.fundabbrv }}</h5>
+	        <p class="card-text">{{ fund.fundname }} <br>
+	        	<div class="table-responsive">
+		        	<table class="table table-hover">
+	              <thead>
+	                <tr>
+	                	<th scope="col">Son Fiyat</th>
+	                	<th scope="col">Günlük Değişim</th>
+	                </tr>
+	                </thead>
+	                <tbody>
+	                	<tr>
+	                		<td>{{ fund.todays_price }} - ({{ fund.date_of_price }})</td>
+	                		<td>{{ fund.daily_change }}</td>
+	                	</tr>
+	                </tbody>
+	              </table>
+              </div>
+	        </p>
+	        <a href="{{url_for('search_add', fund_code = fund.fundabbrv )}}" class="btn btn-secondary">Ekle</a>
+	        <a href="https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod={{ fund.fundabbrv }}" target="_blank" class="btn btn-primary">İncele</a>
+	      </div>
+	    </div>
+	</div>
+  {% endfor %}
+
+  {% if fund_code_search %}
+
+	<div class="col-sm-6">
+	    <div class="card">
+	      <div class="card-body">
+	        <h5 class="card-title">{{ fund_code_search.fundabbrv }}</h5>
+	        <p class="card-text">{{ fund_code_search.fundname }}<br>
+	        	<table class="table table-hover">
+              <thead>
+                <tr>
+                	<th scope="col">Son Fiyat</th>
+                	<th scope="col">Günlük Değişim</th>
+                </tr>
+                </thead>
+                <tbody>
+                	<tr>
+                		<td>{{ fund_code_search.todays_price }} - ({{ fund_code_search.date_of_price }})</td>
+                		<td>{{ fund_code_search.daily_change }}</td>
+                	</tr>
+                </tbody>
+             </table>
+	        </p>
+	        <a href="{{url_for('search_add', fund_code = fund_code_search.fundabbrv )}}" class="btn btn-secondary">Ekle</a>
+	        <a href="https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod={{ fund_code_search.fundabbrv }}" target="_blank" class="btn btn-primary">İncele</a>
+	      </div>
+	    </div>
+	</div>
+
+	{% endif %}
+</div>
+
+
+{% endblock %}

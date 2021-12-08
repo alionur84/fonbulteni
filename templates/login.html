@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% if current_user.is_authenticated  %}
+<!-- redirecting the user to dashboard if already authenticated -->
+	<meta http-equiv="Refresh" content="0; url={{url_for('dashboard')}}" />
+{% else %}
+	<div class="shadow p-3 mb-5 bg-body rounded">
+		<h1>Kullanıcı Girişi</h1>
+		<br/>
+		<form method="POST">
+			{{ form.hidden_tag() }}
+
+			{{ form.username.label(class="form-label") }}
+
+			{{ form.username(class="form-control") }}
+			
+			<br/>
+			{{ form.password.label(class="form-label") }}
+
+			{{ form.password(class="form-control") }}
+			<br/>
+
+			{{ form.submit(class="btn btn-secondary") }}
+			<a href="{{url_for('request_password_reset')}}">Parolamı Unuttum</a>
+			<br>
+			Bir Hesabınız Yok Mu? Şimdi
+			<a href="{{url_for('register')}}">Kayıt Olun!</a>
+		</form>
+	</div>
+{% endif %}
+{% endblock %}
