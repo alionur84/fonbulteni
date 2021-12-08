@@ -243,7 +243,7 @@ def check_confirmed(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if current_user.verified is False:
-            flash('Lütfen Emailinizi Onaylayınız', 'warning')
+            flash('Lütfen Email Adresinizi Onaylayınız', 'warning')
             return redirect(url_for('request_verify'))
         return func(*args, **kwargs)
 
