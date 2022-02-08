@@ -306,13 +306,17 @@ def funds(portfolio_name):
 	if form.validate_on_submit():
 		choice = form.req_funds.data
 		data_to_post = []
-		for i in choice:
-			fund = InvestmentFund.query.filter_by(fundabbrv=i).first()
-			if fund in current_user.preferences: # checks if investment fund is already in user's list
-				flash(f'{fund.fundname} - Fon Zaten Listenizde!!', 'warning')
-				return redirect(url_for('portfolio'))
-			else: # adds it if not
-				client_to_update.preferences.append(fund) 
+		if client_to_update.preferences.count() + len(choice) > 10:
+			flash('10 adetten fazla fon ekleyemezsiniz!!', 'warning')
+			return redirect(url_for('dashboard'))
+		else:
+			for i in choice:
+				fund = InvestmentFund.query.filter_by(fundabbrv=i).first()
+				if fund in current_user.preferences: # checks if investment fund is already in user's list
+					flash(f'{fund.fundname} - Fon Zaten Listenizde!!', 'warning')
+					return redirect(url_for('portfolio'))
+				else: # adds it if not
+					client_to_update.preferences.append(fund) 
 		try:
 			db.session.commit()
 			flash('Fonlar Listenize Eklendi!!', 'success')
@@ -393,12 +397,15 @@ def search():
 
 @app.route('/searchadd/<fund_code>', methods=['GET'])
 @login_required
-@check_confirmed 
+@check_confirmed
 def search_add(fund_code):
 	client_to_update = Clients.query.get_or_404(current_user.id)
 	fund = InvestmentFund.query.filter_by(fundabbrv=fund_code).first()
 	if fund in current_user.preferences:
 		flash(f'{fund.fundname} - Fon Zaten Listenizde!!', 'warning')
+		return redirect(url_for('dashboard'))
+	elif client_to_update.preferences.count() >= 10:
+		flash('10 adetten fazla fon ekleyemezsiniz!!', 'warning')
 		return redirect(url_for('dashboard'))
 	else:
 		client_to_update.preferences.append(fund) 
@@ -494,10 +501,10 @@ def request_verify():
 		if client.verified == False:
 			send_verify_email(client)
 			flash('Doğrulama linki emailinize gönderildi! Lütfen kontrol ediniz', 'info')
-			return redirect(url_for('login'))
+			return redirect(url_for('home'))
 		else:
 			flash('Email zaten doğrulanmış!', 'warning')
-			return redirect(url_for('login'))
+			return redirect(url_for('home'))
 	return render_template("request_verify.html", form=form, title='Doğrulama Emaili İste')
 
 # request password reset
